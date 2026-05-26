@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Megan's Japan Visa</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    background: #FDF6EC;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    overflow-y: scroll;
+    overflow-x: hidden;
+  }
+
+  .container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 16px 12px 50px;
+  }
+
+  .header {
+    text-align: center;
+    padding: 16px 0 12px;
+  }
+
+  .flag { font-size: 40px; display: block; margin-bottom: 6px; }
+
+  h1 {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 18px;
+    color: #C0392B;
+    line-height: 1.4;
+    margin-bottom: 3px;
+  }
+
+  .sub { font-size: 10px; color: #999; letter-spacing: 2px; text-transform: uppercase; }
+
+  .card {
+    background: white;
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 14px;
+    border: 1px solid #f0e0e0;
+    box-shadow: 0 2px 12px rgba(192,57,43,0.07);
+  }
+
+  .stamp {
+    display: inline-block;
+    border: 2px solid #C0392B;
+    color: #C0392B;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    font-weight: 700;
+  }
+
+  .card p { font-size: 13px; line-height: 1.7; color: #1a1a1a; }
+  .card strong { color: #C0392B; }
+
+  .sec-title {
+    font-size: 11px;
+    color: #C0392B;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    font-weight: 700;
+  }
+
+  .q-item {
+    display: flex;
+    gap: 9px;
+    padding: 8px 0;
+    border-bottom: 1px dashed #f5e5e5;
+    align-items: flex-start;
+  }
+  .q-item:last-child { border-bottom: none; }
+
+  .q-num {
+    background: #C0392B;
+    color: white;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .q-body { font-size: 12.5px; line-height: 1.5; }
+  .q-hint { font-size: 11px; color: #bbb; font-style: italic; margin-top: 1px; }
+
+  /* GRID */
+  .grid-scroll {
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 0 -4px;
+    padding: 4px;
+  }
+
+  #wordGrid {
+    display: inline-grid;
+    gap: 3px;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  .cell {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    color: #1a1a1a;
+    background: #FDF6EC;
+    border: 1.5px solid #eee;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.1s, transform 0.1s;
+  }
+
+  .cell.selected {
+    background: #FFB7C5;
+    border-color: #e8909f;
+    transform: scale(1.1);
+    z-index: 2;
+    position: relative;
+  }
+
+  .cell.found {
+    background: #C0392B;
+    color: white;
+    border-color: #C0392B;
+  }
+
+  .cell.wrong {
+    background: #ffddd0;
+    border-color: #ffb0a0;
+  }
+
+  .hint-text {
+    font-size: 11.5px;
+    color: #aaa;
+    text-align: center;
+    margin: 10px 0 6px;
+    font-style: italic;
+  }
+
+  .prog-bg {
+    background: #f8e8e8;
+    border-radius: 8px;
+    height: 7px;
+    overflow: hidden;
+    margin: 10px 0 5px;
+  }
+
+  .prog-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #C0392B, #C9960C);
+    border-radius: 8px;
+    transition: width 0.5s;
+    width: 0%;
+  }
+
+  .prog-text {
+    text-align: center;
+    font-size: 11px;
+    color: #aaa;
+    margin-bottom: 10px;
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 10px;
+  }
+
+  .chip {
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    background: #f8e8e8;
+    color: #C0392B;
+    border: 1px solid #f0c0c0;
+    transition: all 0.3s;
+  }
+
+  .chip.found {
+    background: #C0392B;
+    color: white;
+    text-decoration: line-through;
+    opacity: 0.6;
+  }
+
+  .win-card {
+    display: none;
+    background: white;
+    border-radius: 14px;
+    padding: 24px 18px;
+    margin-bottom: 16px;
+    border: 2px solid #C9960C;
+    box-shadow: 0 4px 24px rgba(201,150,12,0.15);
+    text-align: center;
+  }
+
+  .win-card.show {
+    display: block;
+    animation: pop 0.5s ease;
+  }
+
+  @keyframes pop {
+    0% { opacity:0; transform:scale(0.9) translateY(16px); }
+    100% { opacity:1; transform:scale(1) translateY(0); }
+  }
+
+  .win-emoji { font-size: 44px; display: block; margin-bottom: 10px; }
+
+  .win-card h2 {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 18px;
+    color: #C0392B;
+    margin-bottom: 10px;
+  }
+
+  .approved {
+    display: inline-block;
+    border: 3px solid #C0392B;
+    color: #C0392B;
+    font-size: 18px;
+    font-weight: 900;
+    letter-spacing: 3px;
+    padding: 6px 16px;
+    border-radius: 6px;
+    margin: 8px 0;
+    transform: rotate(-5deg);
+    text-transform: uppercase;
+  }
+
+  .win-card p { font-size: 13px; line-height: 1.7; color: #1a1a1a; margin-top: 10px; }
+  .sig { font-size: 11px; color: #bbb; font-style: italic; margin-top: 12px; }
+
+  /* petals */
+  .petals { position: fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:999; overflow:hidden; }
+  .petal { position: absolute; top: -30px; animation: fall linear infinite; }
+  @keyframes fall {
+    0% { transform: translateY(0) rotate(0deg); opacity:0.7; }
+    100% { transform: translateY(110vh) rotate(360deg); opacity:0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="petals" id="petals"></div>
+
+<div class="container">
+
+  <div class="header">
+    <span class="flag">🇯🇵</span>
+    <h1>Official Japan Visa<br>Application Form</h1>
+    <p class="sub">Ministry of Future Husband Affairs</p>
+  </div>
+
+  <div class="card">
+    <div class="stamp">🔒 Top Secret</div>
+    <p>Dear <strong>Megan</strong>,<br><br>
+    I have been doing some very serious research. Japan has strict entry requirements.<br><br>
+    Before we can book the flights, you need to complete this <strong>official security word search</strong>. Find all 8 hidden words to unlock your visa.<br><br>
+    Good luck. The trip depends on it. 🌸<br><br>
+    — <strong>Your Future Husband</strong></p>
+  </div>
+
+  <div class="card">
+    <div class="sec-title">🌸 Security Questions — Find the Answers</div>
+    <div class="q-item"><div class="q-num">1</div><div class="q-body">What tier were you unlocked at?<div class="q-hint">Very exclusive 👀</div></div></div>
+    <div class="q-item"><div class="q-num">2</div><div class="q-body">You are...?<div class="q-hint">Obviously</div></div></div>
+    <div class="q-item"><div class="q-num">3</div><div class="q-body">Your daughter's nickname?<div class="q-hint">Starts with G</div></div></div>
+    <div class="q-item"><div class="q-num">4</div><div class="q-body">My dying wish? 💨<div class="q-hint">You know exactly what this is</div></div></div>
+    <div class="q-item"><div class="q-num">5</div><div class="q-body">In which country will I get some? ✈️<div class="q-hint">Land of the Rising Sun</div></div></div>
+    <div class="q-item"><div class="q-num">6</div><div class="q-body">Your eye colour?<div class="q-hint">Like chocolate 🍫</div></div></div>
+    <div class="q-item"><div class="q-num">7</div><div class="q-body">Who is your future husband?<div class="q-hint">The guy who made this 😏</div></div></div>
+    <div class="q-item"><div class="q-num">8</div><div class="q-body">You are also...?<div class="q-hint">More than just cute</div></div></div>
+  </div>
+
+  <div class="card">
+    <div class="sec-title">🔍 Find the Words</div>
+    <div class="grid-scroll">
+      <div id="wordGrid"></div>
+    </div>
+    <p class="hint-text">Tap first letter → tap last letter to select a word</p>
+    <div class="prog-bg"><div class="prog-fill" id="progFill"></div></div>
+    <div class="prog-text" id="progText">0 of 8 words found</div>
+    <div class="chips" id="chips"></div>
+  </div>
+
+  <div class="win-card" id="winCard">
+    <span class="win-emoji">🎌</span>
+    <h2>Application Complete!</h2>
+    <div class="approved">APPROVED</div>
+    <p>Congratulations <strong>Megan</strong>.<br><br>
+    Your Japan Visa has been officially approved by the Ministry of Future Husband Affairs.<br><br>
+    Your future husband will be in touch shortly to discuss travel arrangements.<br><br>
+    Please keep your schedule open. 🌸✈️</p>
+    <p class="sig">— Stefan, Your Future Husband 💌</p>
+  </div>
+
+</div>
+
+<script>
+const WORDS = ['MILF','CUTE','GABBY','FART','JAPAN','BROWN','STEFAN','AMAZING'];
+const SIZE = 10;
+let grid = [], solution = {}, found = new Set();
+let firstTap = null, tapCells = [];
+
+function make() {
+  grid = Array.from({length:SIZE}, ()=>Array(SIZE).fill(''));
+  solution = {};
+  const dirs = [[0,1],[1,0],[1,1],[0,-1],[-1,0],[-1,-1],[1,-1],[-1,1]];
+  const shuffled = [...WORDS].sort(()=>Math.random()-0.5);
+  for (const w of shuffled) {
+    let ok=false, tries=0;
+    while (!ok && tries<400) {
+      tries++;
+      const d=dirs[Math.floor(Math.random()*dirs.length)];
+      const r=Math.floor(Math.random()*SIZE), c=Math.floor(Math.random()*SIZE);
+      if (fits(w,r,c,d)) { place(w,r,c,d); ok=true; }
+    }
+  }
+  const abc='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  for (let r=0;r<SIZE;r++) for (let c=0;c<SIZE;c++) if (!grid[r][c]) grid[r][c]=abc[Math.floor(Math.random()*26)];
+}
+
+function fits(w,r,c,d) {
+  for (let i=0;i<w.length;i++) {
+    const nr=r+d[0]*i, nc=c+d[1]*i;
+    if (nr<0||nr>=SIZE||nc<0||nc>=SIZE) return false;
+    if (grid[nr][nc]&&grid[nr][nc]!==w[i]) return false;
+  }
+  return true;
+}
+
+function place(w,r,c,d) {
+  const cells=[];
+  for (let i=0;i<w.length;i++) {
+    const nr=r+d[0]*i, nc=c+d[1]*i;
+    grid[nr][nc]=w[i]; cells.push(`${nr}-${nc}`);
+  }
+  solution[w]=cells;
+}
+
+function line(id1,id2) {
+  const [r1,c1]=id1.split('-').map(Number);
+  const [r2,c2]=id2.split('-').map(Number);
+  const dr=r2-r1, dc=c2-c1;
+  if (dr!==0&&dc!==0&&Math.abs(dr)!==Math.abs(dc)) return [];
+  const len=Math.max(Math.abs(dr),Math.abs(dc));
+  const cells=[];
+  for (let i=0;i<=len;i++) {
+    const r=r1+(dr===0?0:(dr>0?1:-1))*i;
+    const c=c1+(dc===0?0:(dc>0?1:-1))*i;
+    const el=document.querySelector(`[data-id="${r}-${c}"]`);
+    if (el) cells.push(el);
+  }
+  return cells;
+}
+
+function clearSel() {
+  tapCells.forEach(c=>{ if (!c.classList.contains('found')) c.classList.remove('selected','wrong'); });
+  tapCells=[];
+}
+
+function render() {
+  const el=document.getElementById('wordGrid');
+  el.style.gridTemplateColumns=`repeat(${SIZE},30px)`;
+  el.innerHTML='';
+  for (let r=0;r<SIZE;r++) for (let c=0;c<SIZE;c++) {
+    const div=document.createElement('div');
+    div.className='cell'; div.textContent=grid[r][c];
+    div.dataset.id=`${r}-${c}`;
+    div.addEventListener('click',()=>tap(div));
+    el.appendChild(div);
+  }
+}
+
+function tap(cell) {
+  if (cell.classList.contains('found')) return;
+  if (!firstTap) {
+    firstTap=cell; cell.classList.add('selected'); tapCells=[cell];
+  } else {
+    if (cell===firstTap) { clearSel(); firstTap=null; return; }
+    const cells=line(firstTap.dataset.id, cell.dataset.id);
+    clearSel();
+    if (cells.length<2) { firstTap=null; return; }
+    tapCells=cells;
+    const w=cells.map(c=>c.textContent).join('');
+    const rev=w.split('').reverse().join('');
+    let match=null;
+    for (const word of WORDS) if ((w===word||rev===word)&&!found.has(word)){match=word;break;}
+    if (match) {
+      found.add(match);
+      cells.forEach(c=>{c.classList.remove('selected');c.classList.add('found');});
+      document.getElementById(`chip-${match}`).classList.add('found');
+      tapCells=[]; updateProg();
+    } else {
+      cells.forEach(c=>c.classList.add('wrong'));
+      setTimeout(()=>{clearSel();},600);
+    }
+    firstTap=null;
+  }
+}
+
+function updateProg() {
+  const n=found.size, t=WORDS.length;
+  document.getElementById('progFill').style.width=(n/t*100)+'%';
+  document.getElementById('progText').textContent=`${n} of ${t} words found`;
+  if (n===t) setTimeout(()=>{
+    document.getElementById('winCard').classList.add('show');
+    document.getElementById('winCard').scrollIntoView({behavior:'smooth'});
+    confetti();
+  },400);
+}
+
+function confetti() {
+  const emojis=['🌸','🎌','⛩️','✈️','💌','🎊'];
+  const c=document.getElementById('petals');
+  for (let i=0;i<20;i++) setTimeout(()=>{
+    const p=document.createElement('div');
+    p.className='petal'; p.textContent=emojis[Math.floor(Math.random()*emojis.length)];
+    p.style.left=Math.random()*100+'vw';
+    p.style.animationDuration=(2+Math.random()*3)+'s';
+    p.style.fontSize=(16+Math.random()*18)+'px';
+    c.appendChild(p); setTimeout(()=>p.remove(),5000);
+  },i*150);
+}
+
+function renderChips() {
+  const el=document.getElementById('chips');
+  WORDS.forEach(w=>{
+    const d=document.createElement('div');
+    d.className='chip'; d.id=`chip-${w}`; d.textContent=w; el.appendChild(d);
+  });
+}
+
+function petals() {
+  const c=document.getElementById('petals');
+  for (let i=0;i<10;i++) {
+    const p=document.createElement('div');
+    p.className='petal'; p.textContent=['🌸','🌺','🌼'][i%3];
+    p.style.left=Math.random()*100+'vw';
+    p.style.animationDuration=(8+Math.random()*8)+'s';
+    p.style.animationDelay=(Math.random()*10)+'s';
+    p.style.fontSize=(10+Math.random()*10)+'px';
+    c.appendChild(p);
+  }
+}
+
+make(); render(); renderChips(); petals();
+</script>
+</body>
+</html>
